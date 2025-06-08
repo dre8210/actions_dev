@@ -1100,7 +1100,7 @@ env: #remove this 👈
   IMAGE_NAME: e-com-app
   DOCKER_USERNAME: getdzidon
 # DOCKER_PASSWORD: PrintTest!243! 
-  # DOCKER_HUB_TOKEN: dckr_pat_JOVNo4v6B_cdG0a7l4Q2bn4ojHY
+  
 
 jobs:
   docker_build:
