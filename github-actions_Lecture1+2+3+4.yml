@@ -1,0 +1,1795 @@
+
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜⬜️⬜️⬜️ FIRST SESSION ⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️
+
+####### Topics to cover in the course: #######
+👉 ● What is CI/CD?:
+👉 ● GitHub Actions - Core Concepts:
+👉 ● Continuous Integration:
+👉 ● SAST Scan with SonarQube, Snyk, npm audit, Trivy:
+👉 ● Continuous Deployment (EC2, ECS, lambda, S3):
+👉 ● Reusable Workflows (Self built):
+👉 ● Dependabot and Security Overview:
+
+## Prerequisites of CICD GitHub with Github Actions
+# 👉 ● Introduction to YAML:
+
+
+## Bonus
+👉 ● Webhooks and Slack Notifications: Remind me to demonstrate it in case I forgot
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Course: GitHub Actions for DevOps Engineers. 
+Tutor: Donatus (Dee)
+Date: 24/05/2025
+Lesson: YAML and CI-CD with GitHub Actions
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜⬜️⬜️⬜️⬜️⬜️⬜️ Prerequisites ⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜⬜️⬜️⬜️⬜️⬜️⬜️
+
+
+
+
+#🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦 Introduction to YAML 🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
+
+🟪 Introduction to YAML:
+- YAML (Yet Another Markup Language) is a human-readable data serialization format commonly used for configuration files and data
+ exchange between applications. 
+- Its simplicity and readability make it a popular choice for defining complex data structures in a clear and concise manner.
+
+🟪 Some Critical DevOps Tools that utilize YAML:
+- Kubernetes
+- Helm    # this is the package manager for K8s just as yum is for RedHat/Centos, apt for Ubuntu, brew for MacOS, and chocolatey for Windows.
+- GitHub Actions
+- Docker-compose
+- Ansible
+- GitLab CICD
+- Travis CI
+- CircleCI
+- Azure Pipelines
+- Bitbucket Pipelines
+- OpenShift
+- ArgoCD
+
+#........................................................................
+🟪 Basic Syntax:
+
+Note:
+- YAML files use the .yml or .yaml file extension.
+- YAML is case-sensitive.
+- YAML is indentation-sensitive.
+- YAML uses colons (:) to separate keys from values.
+- YAML uses dashes (-) for lists and arrays.
+- YAML uses hashes (#) for comments.
+
+#.........................................................................
+👉 -- Key-Value Pairs:
+
+- key: value
+- keys are strings.
+- values can be strings, numbers, booleans, lists, or dictionaries.
+- keys and values are separated by a colon and a space.
+- At its core, YAML uses key-value pairs to represent data.
+
+🟨 example:
+
+name: Alice # Key: name, Value: Alice
+age: 30
+city: "New York" # Strings can be quoted.
+
+#.........................................................................
+👉 -- Indentation: 
+
+- YAML uses indentation to represent hierarchy.
+- Always use spaces (not tabs) for indentation.
+- Consistent indentation is crucial (typically 2 spaces per level).
+
+🟨 eg:
+
+person:
+  name: Alice
+  age: 30
+  location: "New York"
+  children: 
+    - Frederick 
+    - Grace 
+    - Chinedu 
+    - Shona 
+  mother: Olivia
+
+#.........................................................................
+👉 -- Comments:
+- Comments start with # and extend to the end of the line.
+
+# To comment multiple lines, Select the lines to comment, then use control/command + forward slash; (ctrl+/)
+
+#.........................................................................
+👉 -- Data types:
+
+- Simple values like strings, numbers, booleans, and null.
+
+string: "Hello, World!" #Strings are enclosed in double quotes.
+integer: 42
+float: 3.14
+boolean: true
+null_value: null
+
+#.........................................................................
+👉 -- Lists (Sequences):
+
+- Ordered collections of items.
+
+fruits:
+  - Apple
+  - Banana
+  - Cherry
+
+Or in a single line:
+fruits: [Apple, Banana, Cherry]
+
+
+👉-- Dictionaries (Mappings): 
+
+ Key-value pairs, similar to JSON objects or Python dictionaries.
+
+person:
+  name: Bob
+  age: 25
+  email: bob@example.com
+
+#.........................................................................
+👉 -- Nested Structures:
+
+ YAML supports nesting of lists and dictionaries.
+
+employees:
+  - name: John
+    position: Manager
+    skills:
+      - Leadership
+      - Communication
+        - Written 
+        - Verbal
+        # - Sign language 
+  - name: Sarah
+    position: Developer
+    skills:
+      - Python
+      - JavaScript
+
+#.........................................................................
+👉 -- Advanced Features:
+
+ Multiline Strings:
+
+ Literal Block Scalar (|): Preserves line breaks.
+
+message: |
+  This is a multiline message.
+  Line breaks are preserved.
+  Useful for paragraphs or code blocks.
+  Every DevOps practitioner must know this.
+receiver: Donatus 
+
+#.........................................................................
+👉 -- Folded Block Scalar (>):
+
+ Line breaks are converted to spaces.
+
+message: >
+  This is a long message 
+  that will be folded into 
+  a single line when parsed.
+
+#.........................................................................
+👉 -- Anchors and Aliases:
+
+ Reuse pieces of data within the YAML document.
+
+defaults: &default_settings
+  timeout: 30
+  retries: 5
+
+service1:
+  <<: *default_settings
+  endpoint: "https://api.service1.com"
+
+service2:
+  <<: *default_settings
+  endpoint: "https://api.service2.com"
+
+
+ &default_settings - creates an anchor.
+ *default_settings - references the anchored content.
+ <<: - merges the content into the current mapping.
+
+#.........................................................................
+👉 -- Merge Keys:
+
+ Another way to merge mappings.
+
+defaults: &defaults
+  setting1: true
+  setting2: false
+
+custom_settings:
+  <<: *defaults
+  setting2: true  # Override default
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟪 -- Real-World Examples:
+
+- - Application Configuration
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 1 🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟨 --Example 1: Web Application Config
+
+app_name: MyAwesomeApp
+version: 1.0.0
+debug_mode: true
+database:
+  host: localhost
+  port: 5432
+  username: admin
+  password: secret
+allowed_hosts:
+  - localhost
+  - 127.0.0.1
+
+✅ Explanation:
+ Scalars for simple values.
+ Mappings for grouped settings (e.g., database).
+ Lists for multiple items (e.g., allowed_hosts).
+ Docker Compose
+ Define multi-container Docker applications.
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 2 🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟨 --Example 2: docker-compose.yml
+
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    environment:
+      - DEBUG=1
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+
+✅Explanation:
+Services define each container.
+Mappings and lists configure service properties.
+
+
+- - CI/CD Pipeline Configuration
+📝 Many CI/CD tools use YAML for pipeline definitions.
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 3 🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟨 --Example 3: CircleCI Configuration
+
+
+version: 2.1
+orbs:
+  node: circleci/node@4.1.0
+jobs:
+  build:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Run Tests
+          command: npm test
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 4 🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟨 --Example 4: 
+
+ ❌ Incorrect YAML Syntax
+
+ Products:
+ Name: Laptop
+ Price: 999.99
+ Stock: 25
+ Name: Smartphone
+ Price: 599.99
+ Stock: 50
+ Name: Tablet
+ Price: 399.99
+ Stock: 30
+
+
+✅ Solution: Correct representation using lists.
+
+products:
+  - name: "Laptop"
+    price: 999.99
+    stock: 25
+  - name: "Smartphone"
+    price: 599.99
+    stock: 50
+  - name: "Tablet"
+    price: 399.99
+    stock: 30
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+❗-- Common Mistakes to Avoid when creating YAML files:
+
+1.  Incorrect Indentation: YAML is sensitive to indentation. Make sure to use consistent spaces for indentation.
+2.  Using Tabs Instead of Spaces: YAML does not support tabs. Always use spaces for indentation. 
+3.  Unquoted Special Characters: Special characters like :, -, and # should be quoted to avoid parsing issues.
+4.  Misaligned Indentation: Ensure that nested structures are properly aligned for readability.
+5.  Missing Spaces: Always separate keys and values with a colon and a space.
+6.  Misplaced Comments: Comments should start with # and be placed at the beginning of a line or after a key-value pair.
+7.  Using Reserved Keywords: Avoid using reserved keywords like yes, no, true, false, null as keys or values.
+
+
+➡️ Misaligned Indentation:
+
+❌ Incorrect:
+
+ fruits:
+   - Apple
+     - Banana  # Incorrect indentation
+   - Cherry
+
+
+✅ Correct:
+
+ fruits:
+   - Apple  
+   - Banana
+   - Cherry
+
+
+✅ -- YAML Best Practices:
+
+1.  Use Consistent Indentation: Use 2 spaces for indentation to maintain readability
+2.  Avoid Tabs: Use spaces instead of tabs for indentation.
+3.  Quoting: Quote strings with special characters or leading/trailing spaces.
+4.  Validate Your YAML: Use online tools or IDE plugins to check for syntax errors.
+5.  Keep It Simple: Aim for readability and maintainability.
+6.  Use Comments: Explain complex configurations or important notes.
+7.  Organize Logically: Group related settings together.
+8.  Use Meaningful Names: Choose descriptive names for keys and values.
+9.  DRY (Don't Repeat Yourself): Use anchors and aliases where appropriate.
+
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 End of Prerequisites 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 End of Prerequisites 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 End of Prerequisites 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+
+
+#🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜 Course: GitHub Actions for DevOps Engineers 🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+
+
+#### ● Understanding CI/CD
+
+🟪-- CI/CD: stands for Continuous Integration (CI) and Continuous Deployment/Delivery (CD). It is a software development practice that
+ enables developers to automate the testing, security scanning, and deployment of applications.
+
+
+➡️-- Continuous Integration (CI): 
+- The practice of automating the integration of code changes from multiple contributors into a single software project.
+
+ Continuous integration is the automated process where developers frequently integrate code into a shared repository — 
+ up to several times a day. They verify each of these integrations (called merges) with various sets of automated tests.
+
+
+# Details will be discussed in the subsequent class.
+
+
+➡️-- Continuous Delivery (CD): 
+- The practice of automatically deploying code changes to production or staging environments. 
+
+ Continuous Delivery places a greater emphasis on automating the code release process for final production. 
+ When a team of developers or engineers has completed their work and is prepared to commit the final version of the code, the
+ Continuous Delivery phase is responsible for orchestrating the release of the final code to production.
+
+ Moreover, Continuous delivery is an automated approach that pushes applications to the delivery environments. Here, development 
+ teams supply the validated code changes (all updates, new features, and bug fixes) performed in continuous integration 
+ to specific code repositories such as GitHub.
+
+
+➡️-- Continuous Deployment (also CD): 
+ Unlike continuous delivery, whereupon the developer’s approval, the code is pushed to production, continuous deployment 
+ depends on well-designed test automation to go live. Here, no manual/human intervention occurs before production and only a 
+ failed test will prevent a new change to be deployed to production.
+
+ So, if the code passes automated testing, continuous deployment would push a developer’s code changes to a cloud application
+ within minutes. This way, continuously receiving and incorporating feedback becomes easy.
+
+
+🟪 -- Continuous Deployment to EC2, ECS, S3 and Lambda:
+
+➡️ - Deployment to EC2:
+ ✅ Suitable for hosting static websites using an Apache/Nginx web server.
+ ✅ Ideal for hosting static HTML/CSS/JS files 
+ ❌ Requires manual maintenance, security patches, and scaling.
+
+Steps:
+ - Launch an EC2 instance, install Apache or Nginx, and copy HTML/CSS files.
+ - GitHub Actions workflow copies files to the EC2 instance.
+ - Configure security groups to allow HTTP traffic.
+
+
+➡️ - Deployment to S3:
+ ✅ Static Website Hosting.
+ ✅ Ideal for hosting static HTML/CSS/JS files without needing a server.
+ ✅ Highly scalable and cost-effective.
+ ❌ Cannot run server-side logic (e.g., PHP, Node.js).
+
+ Steps:
+ - Upload HTML/CSS files to an S3 bucket.
+ - Enable static website hosting and set the correct bucket policy.
+ - Use GitHub Actions to automate uploads to S3.
+ - Optional: Use AWS CloudFront for CDN and SSL support.
+
+
+➡️ - Deployment to ECS: 
+ ✅ Hosting a Static Website in a Container
+ ✅ Useful if you want to run a static site in an Nginx container.
+ ✅ Can be integrated with Fargate for serverless hosting.
+ ✅ ECS service ensures availability and scalability.
+ ❌ More complex setup compared to S3.
+
+Steps:
+ - Create an ECS Cluster and Task Definition.
+ - Use an Nginx Docker image to serve the static files.
+ - Deploy using GitHub Actions, pushing updates to the container registry (ECR).
+
+
+➡️ - Lambda:
+ ✅ Deploying serverless functions.
+ ✅ It is for executing code in response to events and is not meant for static web hosting.
+ ✅ Can be paired with API Gateway to handle dynamic content.
+ ❌ AWS Lambda is not designed for serving static HTML/CSS.
+ 
+ Steps:
+ - Create a Lambda function to handle dynamic functionality.
+ - Use API Gateway to trigger the Lambda function.
+ - Use GitHub Actions to deploy Lambda functions.
+ Alternative:
+ - Use S3 for static files and Lambda for dynamic functionality (e.g., form submissions, authentication).
+
+
+# We will talk about these in Details latter
+
+
+# Ref: https://medium.com/@Arnav-mah/unlocking-the-power-of-ci-cd-a-step-by-step-guide-with-github-actions-codedeploy-and-aws-ec2-9f962acf9037
+# Ref: https://testrigor.com/blog/what-is-cicd/
+
+
+🟪 Benefits of CI/CD:
+ - Faster development cycles
+ - Early detection of bugs
+ - Improved collaboration among developers
+ - Automated security checks
+ - Reduced risk of human error
+ - Consistent and reliable deployments
+ - Faster time to market
+
+
+🟪 Popular CI/CD tools:
+ GitHub Actions
+ Jenkins
+ CodeShip
+ CircleCI
+ Azure DevOps
+ AWS CodePipeline
+ ArgoCD
+ GitLab CI/CD
+ Bamboo
+ Bitbucket Pipelines
+
+🟪🟪🟪🟪 GitHub Actions - Core Concepts:  🟪🟪🟪🟪
+
+🟪 -- GitHub Actions:  
+- GitHub Actions is an integrated CI/CD platform within GitHub that automates software  development workflows.
+- It lets you build, test, and deploy code directly from your repository using simple YAML configuration files.
+
+🟪 - The Problem It Solves:
+➡️ 1. Automation Needs: Reduces manual efforts by automating build and deployment processes.
+➡️ 2. Fragmented Tooling: Eliminates the need for external CI/CD services, streamlining workflows within GitHub.
+➡️ 3. Delayed Feedback: Provides immediate feedback on code changes through automated testing.
+➡️ 4. Complex Setup: Simplifies CI/CD setup with straightforward configurations.
+
+
+🟪 Here are the core concepts/components of GitHub Actions:
+
+➡️ 1. Workflows:
+- A workflow is an automated process that runs one or more jobs.
+- It is defined using YAML files inside .github/workflows/.
+- Can be triggered by events (e.g., push, pull request, schedule, manual)
+- Workflows automate tasks like building, testing, and deploying code.
+
+➡️ 2. Events:
+- Events are specific activities that trigger a workflow.
+- Examples of such activities include push, pull request, schedule, workflow_dispatch, etc.
+push: Runs when code is pushed to the repository.
+pull_request: Runs when a pull request is opened or updated.
+schedule: Runs at specific times (cron jobs).
+workflow_dispatch: Manual trigger via GitHub UI or API.
+release: Runs when a new release is created.
+
+➡️ 3. Job: 
+- A job is a set of steps executed on the same runner (virtual machine or container) within a workflow. 
+- Each job consists of actions and commands that run sequentially. 
+- Jobs can run independently or have dependencies, allowing for parallel or sequential execution within the workflow.
+
+➡️ 4. Runners: 
+- A runner is a server/virtual machine (or container) that executes the jobs specified in a workflow. 
+- It can be a GitHub-hosted runner provided by GitHub(Linux, macOS, Windows) with pre-installed tools or a self-hosted runner that you manage. 
+- The runner processes the job's steps in the specified operating system environment.
+
+➡️ 5. Steps:
+- A step is an individual task within a job.
+- Steps can run commands or use actions.
+
+➡️ 6. Actions:
+- Actions are reusable units of code that can be used in workflows to perform specific tasks.
+- Actions can be custom-built or sourced from the GitHub Actions Marketplace.
+- Example: actions/checkout@v4 checks out your repository in a workflow.
+
+➡️ 7. Secrets and Variables:
+- Secrets are encrypted environment variables that can be used to store sensitive information like API keys, passwords, etc.
+- Variables are placeholders that can be used to store and reuse non-sensitive values within a workflow.
+
+🟨 Example GitHub Action Workflow:
+
+ name: CI Pipeline
+
+
+ on:
+   push:
+     branches:
+       - main
+   pull_request:
+     branches:
+       - main
+
+
+ jobs:
+   build:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout into the repository
+         uses: actions/checkout@v4
+       - name: Install dependencies
+         run: npm install
+       - name: Run tests
+         run: npm test
+
+
+#🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️ Hands-On 🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️
+#🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️ Hands-On 🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️
+#🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️ Hands-On 🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️
+
+
+🟪🟪🟪🟪 - Hands-On: 🟪🟪🟪🟪
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 1 ❌🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟨 eg. 1: .github/workflows/first_workflow.yml
+
+name: First Workflow
+
+on:
+  - push
+
+jobs: 
+    first_job: 
+        runs-on: ubuntu-latest
+        steps:
+            - name: Welcome Message
+              run: echo "My first GitHub Actions Job"
+
+            - name: List Files 
+              run: ls 
+
+            - name: Read file 
+              run: cat dockerfile
+
+
+❗ This job will fail because there is no file called dockerfile on the "ubuntu-latest" github hosted runner. 
+
+
+👉 You can find all publicly available actions here: https://github.com/marketplace?type=actions
+
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 2 🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+
+🟩 eg 2: .github/workflows/first_job.yml
+
+name: First Job
+
+on:
+  - push
+
+jobs: 
+    first_job: 
+        name: DevOps First Job
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: List and Read files
+              run: |
+                echo "My first GitHub Actions Job"
+                ls -1a
+                cat dockerfile
+
+
+❗ The use of checkout@v4 above gives github actions the permission to now checkout into the repository and perform the actions listed. 
+
+
+
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FIRST SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FIRST SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FIRST SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FIRST SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FIRST SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FIRST SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Course: GitHub Actions for DevOps Engineers. 
+Tutor: Donatus (Dee)
+Date: 25.05.2025
+Lesson: Lecture 2 - GitHub Actions workflow basics continued
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 3 🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+📝 Now, create another workflow in the workflows directory making it two workflows
+
+🟨 eg. 3: .github/workflows/ascii-workflow.yml
+
+name: ASCII Workflow
+
+on:
+  - push
+
+jobs: 
+    first_job: 
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Install Cowsay Program
+              run: sudo apt-get install cowsay -y
+
+            - name: Execute Cowsay Command 
+              run: cowsay -f dragon "Run for cover, I am a DRAGON......RAWR" >> dragon.txt
+
+            - name: Test file exists 
+              run: grep -i "dragon" dragon.txt
+
+            - name: Read File
+              run: cat dragon.txt 
+
+            - name: List Repo files 
+              run: ls -ltra
+
+
+
+📝 We can however, create a script and use (call) it in our workflow. Create the script in the root of the repo.
+
+📝 Create the bash script in the root of the repo and name it #ascii-script.sh
+
+# /bin/bash
+sudo apt-get install cowsay -y
+cowsay -f dragon "Run for cover, I am a DRAGON......RAWR" >> dragon.txt
+grep -i "dragon" dragon.txt
+cat dragon.txt 
+ls -ltra
+
+
+#🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧 eg. 4 ❌🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟨 eg.4: .github/workflows/ascii-workflow.yml
+
+name: ASCII Workflow
+
+on:
+  - push
+
+jobs: 
+    first_job: 
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Execute Shell Script
+              run: ./ascii-script.sh
+
+
+❗We will run into permission issues so we have to give the workflow the permission to execute shell script
+
+#🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 correction ✅🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+🟩 eg. 4a: .github/workflows/ascii-workflow.yml (updated)
+
+name: ASCII Workflow
+
+on:
+  - push
+
+jobs: 
+    first_job: 
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Execute Shell Script
+              run: |
+                chmod +x ascii-script.sh
+                ./ascii-script.sh
+
+
+# 🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧🟧
+
+🟪 - How to run multiple jobs:
+
+Normally, in your work environment, you will build, test and deploy. Each process must have its own unique job to run.
+It is important to note that each job must run on its own machine. 
+
+🟨 eg. 5: .github/workflows/multiple-jobs.yml
+
+name: Build, Test and Deploy
+
+on: 
+  - push 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Cowsay Program
+        run: sudo apt-get install cowsay -y
+
+      - name: Execute Cowsay Command 
+        run: cowsay -f dragon "Run for cover, I am a DRAGON......RAWR" >> dragon.txt
+
+      - name: Sleep for 30 seconds
+        run: sleep 30
+
+
+  test: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep for 10 seconds
+        run: sleep 10
+
+      - name: Test file exists 
+        run: grep -i "dragon" dragon.txt
+
+
+  deploy: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Read File
+        run: cat dragon.txt
+
+      - name: Deploy 
+        run: echo "Deploying......."
+
+
+- The above example is not actual deployment but just to demonstrate how multiple jobs can be run in one workflow to simulate
+  real world situation.
+- The example above will create three distinct parallel jobs. #(build, test and deploy)
+- it will fail because the jobs are not dependent on each other. (Missing Dependency Between Jobs) making them run 
+  in parallel.
+- The dragon.txt file is created in the build job, and jobs run in separate virtual environments unless explicitly 
+  connected with #needs
+- Since each job gets a fresh runner, the test and deploy jobs won't have access to dragon.txt, causing the grep 
+  and cat commands to fail.
+
+- We actually want these jobs to be dependent on each other in a successive manner. 
+
+#🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 modification ❌🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+Now, let's correct our mistakes by introducing dependencies between the jobs by introducing the needs keyword.:
+
+
+🟨 eg. 5a: .github/workflows/multiple-jobs.yml
+
+name: Build, Test and Deploy
+
+on: 
+  - push 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Cowsay Program
+        run: sudo apt-get install -y cowsay
+
+      - name: Execute Cowsay Command 
+        run: cowsay -f dragon "Run for cover, I am a DRAGON......RAWR" >> dragon.txt
+
+      - name: Sleep for 30 seconds
+        run: sleep 30
+
+
+  test: 
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep for 10 seconds
+        run: sleep 10
+
+      - name: Test file exists 
+        run: grep -i "dragon" dragon.txt
+
+  deploy: 
+    needs: test
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Read File
+        run: cat dragon.txt
+
+      - name: Deploy 
+        run: echo "Deploying......."
+
+
+❗- We will run into another error. 
+
+- Since the three jobs are running on three different machines, 
+we need to find a way to move the built artifact across to test and deploy jobs.
+https://github.com/marketplace/actions/upload-a-build-artifact:
+
+- we will do this by using the "upload-artifact" action on the build job and the "download-artifact" action on the test and deploy jobs.
+
+#🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 Final correction ✅🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+🟩 eg. 5b: .github/workflows/multiple-job-cosway.yml
+
+name: Build, Test and Deploy
+
+on: 
+  - push 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Cowsay Program
+        run: sudo apt-get install cowsay -y
+
+      - name: Execute Cowsay Command 
+        run: cowsay -f dragon "Run for cover, I am a DRAGON......RAWR" >> dragon.txt
+
+      - name: Upload Dragon File #correction
+        uses: actions/upload-artifact@v4
+        with:
+          name: dragon-text-file
+          path: dragon.txt
+
+
+  test: 
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Download Dragon File  #correction
+        uses: actions/download-artifact@v4 
+        with:
+          name: dragon-text-file
+
+      - name: Test file exists 
+        run: grep -i "dragon" dragon.txt
+
+  deploy: 
+    needs: test
+    runs-on: ubuntu-latest
+    steps: 
+
+      - name: Download Dragon File  #correction
+        uses: actions/download-artifact@v4 
+        with:
+          name: dragon-text-file
+
+      - name: Read File
+        run: cat dragon.txt
+
+      - name: Deploy 
+        run: echo "Deploying......."
+
+
+❗ -- You don't need to state the path of the artifact in the build job above, actions will know the file and where
+   it is located by it's name. 
+
+📝 - Note that when you're working with a java application, it has to upload a jar file. 
+📝 - This artifact is now saved and can be downloaded for future use just as you do with Nexus (for artifactory).
+📝 - These artifacts in Github are stored for at least 90 days. 
+
+📝 - However, you can change the lifespan to your desired number of days. 
+settings ➡️ actions ➡️ General ➡️ Artifact and log retention
+
+📝 - For free accounts, you cannot extend beyond 90 days.
+
+
+
+🟪 Types of Environments:
+- Sandbox Environment
+- Development (dev) Environment
+- Staging/Testing Environment
+- Production (prod) Environment
+
+
+🟪 Defining credentials and Variables in a workflow:
+
+You can do this in three ways:
+1. Step Level 
+2. Job Level
+3. Workflow level
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️ STEP LEVEL ❌⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️
+
+🟨 Example 1: Defining credentials as an environmental variables in the STEP Level:
+
+➡️ step-level.yaml
+
+name: Docker Workflow
+
+on:
+  - push
+
+jobs: 
+  docker: 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: Docker Build
+      env:  # remove this 👈
+        CONTAINER_REGISTRY: docker.io
+        DOCKER_USERNAME: getdzidon
+        DOCKER_PASSWORD: PrintTest!243!
+        IMAGE_NAME: e-com-app
+      run: echo docker build -t $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest .
+    # run: echo docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+
+    - name: Docker Login
+      env:  # remove this 👈
+        DOCKER_USERNAME: getdzidon
+        DOCKER_PASSWORD: PrintTest!243!
+      # DOCKER_HUB_TOKEN: NB8E7Bggft6GJBYbbgt655GGu77
+      run: docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+    # run: docker login --username=$DOCKER_USERNAME --password-stdin <<< "$DOCKER_HUB_TOKEN"
+
+    - name: Docker Publish 
+      env:
+        DOCKER_USERNAME: getdzidon
+        DOCKER_PASSWORD: PrintTest!243!
+        IMAGE_NAME: e-com-app
+      run: docker push $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+
+  deploy:
+  needs: docker
+  runs-on: ubuntu-latest 
+
+  steps:
+    - name: Docker login and Docker Run
+      env:  #remove this 👈
+        CONTAINER_REGISTRY: docker.io
+        DOCKER_USERNAME: getdzidon
+        DOCKER_PASSWORD: PrintTest!243!
+      # DOCKER_HUB_TOKEN: NB8E7Bggft6GJBYbbgt655GGu77
+        IMAGE_NAME: e-com-app
+      run: |
+        docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+    #   docker login --username=$DOCKER_USERNAME --password-stdin <<< "$DOCKER_HUB_TOKEN"
+        docker run -d -p 8080:80 $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+
+
+📝 - In Software Engineering, repetition is not considered a good thing. ❌
+📝 - This can make you fail SonarQube Quality Gate during the SAST Scan process. 
+
+This is why the better approach is to define these envvars at the Job level. 
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️ JOB LEVEL ❗✅⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️
+
+🟨 Example 2: Defining credentials as an environmental variables in the JOB Level:
+
+➡️ job-level.yaml
+
+name: Docker Workflow
+
+on:
+  push
+
+
+jobs: 
+  docker: 
+    env:  #remove this 👈
+        CONTAINER_REGISTRY: docker.io
+        DOCKER_USERNAME: getdzidon
+        DOCKER_PASSWORD: PrintTest!243!
+      # DOCKER_HUB_TOKEN: NB8E7Bggft6GJBYbbgt655GGu77
+        IMAGE_NAME: e-com-app
+    runs-on: ubuntu-latest
+
+    steps: 
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Docker Build
+      run: echo docker build -t $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+
+    - name: Docker Login
+      run: docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+    # run: docker login --username=$DOCKER_USERNAME --password-stdin <<< "$DOCKER_HUB_TOKEN"
+
+    - name: Docker Publish 
+      run: docker push $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+
+  deploy:
+    needs: docker
+    env:  #remove this 👈
+        CONTAINER_REGISTRY: docker.io
+        DOCKER_USERNAME: getdzidon
+        DOCKER_PASSWORD: PrintTest!243!
+      # DOCKER_HUB_TOKEN: NB8E7Bggft6GJBYbbgt655GGu77
+        IMAGE_NAME: e-com-app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Docker login and Docker Run
+        run: |
+          docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+       #  docker login --username=$DOCKER_USERNAME --password-stdin <<< "$DOCKER_HUB_TOKEN"
+          docker run -d -p 8080:80 $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+
+
+📝 In the above example, we have also defined the envvars for each job which is also a repetition. 
+✅ - This why is defining the envvars at the workflow level is the best approach. 
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️ WORKFLOW LEVEL ✅⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️
+
+🟨 Example 3: Defining credentials as an environmental variables in the WORKFLOW Level:
+
+➡️ workflow-level.yaml
+
+name: Docker Workflow
+
+on:
+  push:
+
+env: #remove this 👈
+  CONTAINER_REGISTRY: docker.io
+  IMAGE_NAME: e-com-app
+  DOCKER_USERNAME: getdzidon
+# DOCKER_PASSWORD: PrintTest!243! 
+  DOCKER_HUB_TOKEN: dckr_pat_JOVNo4v6B_cdG0a7l4Q2bn4ojHY
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Docker Build
+        run: docker build -t $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest .
+
+      - name: Docker Login
+      # run: docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+        run: echo "$DOCKER_HUB_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
+
+      - name: Docker Publish
+        run: docker push $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+
+  docker_deploy:
+    needs: docker_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Login
+      # run: docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+        run: echo "$DOCKER_HUB_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
+
+      - name: Docker Run
+        run: docker run -d -p 8080:80 $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+
+
+📝 The above example is the best approach ✅ to define your credentials:
+
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️
+
+📝📝📝 Important Things to Note: ❗
+- Hardcoding Credentials: in your workflow is a very bad thing to do. Do not do it! ❌
+- ⚠️ DO NOT DO THIS IN REAL PROJECTS — Hardcoding credentials is a major security risk.
+- GitHub might flag the leaked token.
+- Docker Hub revokes or locks exposed tokens.
+- You have to pass these credentials as environmental variables and GitHub Secretes
+
+✅ Best practice is to obfuscate your credentials in your GitHub repository settings using GitHub Secrets and 
+  then pass them as environmental
+  variables in your workflow. This way, you can keep your credentials safe and secure.
+
+-secretes are encrypted and can only be accessed by the workflow.
+- They are not visible to anyone, not even the repo owner.
+- They are not stored in the - 
+    - workflow logs.
+    - repo files.
+    - workflow files.
+    - workflow run history.
+
+
+
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF SECOND SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF SECOND SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF SECOND SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF SECOND SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF SECOND SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF SECOND SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Course: GitHub actions for DevOps Engineers. (Continued)
+Tutor: Donatus (Dee)
+Date: 31.05.2025
+Lesson: Using Secretes and Variables in GitHub Actions workflows
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️
+
+
+🟪 - Using Secrets and Variables in workflows:
+
+However, looking at the previous examples, We all can agree that the password and other credentials are
+ still hardcoded in the workflow. 
+This is why we have to use secrets. (GitHub Secrets)
+
+➡️ - Secrets in GitHub can be created at the Organizational level to be used by all company repos. 
+
+OR
+
+➡️ - Secrets in GitHub can be created at the Repo level to be used by that specific repo.
+
+
+✅ The most common one is using secrets at the repo level
+
+This is how to do it:
+
+- GitHub Repository ➡️ settings ➡️ Secrets and Variables ➡️ Actions 
+
+#..................................................................................................
+
+Here is a breakdown of variables and secrets in the above example:
+1️⃣ env: Environment Variables
+- Used for non-sensitive values.
+- Defined at the job or step level in the workflow
+- Accessible across steps without being hidden
+- Can be accessed using ${{ env.IMAGE_NAME }} or $IMAGE_NAME
+
+2️⃣ vars: GitHub Variables
+- Used for non-sensitive, reusable values across workflows.
+- Set in GitHub repository settings (under "Settings" ➡️ "Actions" ➡️ "secrets and Variables" ➡️ "Variables").
+- More secure than env.
+- Can be accessed using ${{ vars.DOCKER_USERNAME }}
+
+3️⃣ secrets: GitHub Secrets
+- Used for sensitive information (e.g., API keys, passwords).
+- Set in GitHub repository settings under (under "Settings" ➡️ "Actions" ➡️ "secrets and Variables" ➡️ "secretes").
+- Encrypted & hidden (not visible in logs).
+- Can be accessed using ${{ secrets.DOCKER_PASSWORD }} 
+#..................................................................................................
+
+🟨 EXAMPLE 1. OF A WORKFLOW WITH A WELL DEFINED SECRETS AND VARIABLES:
+
+
+
+on:
+  - push
+
+env:
+    CONTAINER_REGISTRY: docker.io
+    IMAGE_NAME: e-com-app
+
+jobs: 
+  docker_build: 
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Docker Build
+      run: docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+
+    - name: Docker Login
+    # run: docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username "${{ vars.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Docker Publish 
+      run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+  docker_deploy:
+    needs: docker_build
+    runs-on: ubuntu-latest 
+
+    steps:
+       - name: Docker Login
+      #  run: docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+         run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username "${{ vars.DOCKER_USERNAME }}" --password-stdin
+
+       - name: Docker Run
+         run: docker run -d -p 8080:80 ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️OR ⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️
+
+
+
+name: Docker Workflow
+
+on:
+  push:
+
+env:
+  CONTAINER_REGISTRY: docker.io
+  IMAGE_NAME: e-com-app
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Docker Build
+        run: docker build -t $CONTAINER_REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest .
+
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Docker Publish
+        run: docker push $CONTAINER_REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
+
+  docker_deploy:
+    needs: docker_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Docker Run
+        run: docker run -d -p 8080:80 $CONTAINER_REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
+
+
+
+🟨 EXAMPLE 2. OF A WORKFLOW WITH A WELL DEFINED SECRETS AND VARIABLES:
+- We will use this workflow for the next topic on how to trigger a workflow
+
+name: Deploy App to EC2
+
+on:
+  push:
+    branches:
+      - main
+env:
+    TARGET: home
+    EC2_USER: ubuntu
+
+jobs:
+  deploy:
+    environment: prod
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2 Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ vars.HOST_DNS }}
+          REMOTE_USER: ${{ env.EC2_USER }}
+          TARGET: ${{ env.TARGET_DIR }}
+
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOST_DNS }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo apt-get -y update
+            sudo apt-get install -y apache2
+            sudo systemctl daemon-reload
+            sudo systemctl start apache2
+            sudo systemctl enable apache2
+            cd home
+            # Remove existing contents of /var/www/html
+            sudo rm -rf /var/www/html/*
+            # Move new files to /var/www/html
+            sudo mv * /var/www/html
+
+
+
+#⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️ Triggering a Workflow: ⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜
+
+🟪 -- Triggering a Workflow:
+https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/triggering-a-workflow
+
+Workflows can be triggered based on the following:
+1. push
+2. pull_request
+3. workflow_dispatch (manual triggering)
+4. schedule (based on cronjob)
+
+
+➡️ Under push, we have:
+
+🟨 eg 1.
+
+on:
+  - push:
+    branches-ignore: 
+      - feature/*  # feature/add-music, feature/updateimages
+      - test/**    # test/ui/index, test/checkout/payment/
+    branches:
+      - main
+      - '!feature/*'  # ignoring pushing to any branch with name starting with feature using ! 
+
+NB: ❗❗❗You cannot use both ""branches-ignore" and "branches" in the same workflow. You have to choose one. 
+
+
+
+➡️ Also under push, we can have the following:
+🟨 eg 1a. 
+
+on:
+  push:
+    paths:          # contains files or directories you want to use for this workflow
+      - css/**
+      - images/**
+      - index.html
+      - dockerfile
+    paths-ignore:    # contains files or directories you do not want to use for this workflow
+      - dockerignore
+      - gitignore
+      - .github/** # You don't want your pipeline to run when you are building a or updating your pipeline. You can employ  workflow dispatch demonstrated below.
+      - README.md
+    tags:          # contains tag patterns you want to use for this workflow
+      - 'v*.*.*'       # e.g., v1.0.0, v2.1.3
+      - 'release/**'   # e.g., release/2021-09-15
+    tags-ignore:    # contains tag patterns you do not want to use for this workflow
+      - 'beta/**'      # e.g., beta/1.0, beta/2.0
+      - 'test-*'       # e.g., test-123, test-456
+
+
+➡️ Under pull_request, we have:
+
+🟨 eg 2.
+
+on:
+  pull_request:
+     types: # or [opened, closed]
+      - opened
+      - closed
+    paths-ignore:
+    branches:
+
+
+
+➡️ Run Workflow with a CronJob Schedule: 
+➡️ and Workflow_dispatch:
+https://crontab.guru/
+https://crontab.guru/examples.html
+
+
+🟨 eg 3.
+
+docker.yaml
+
+name: Docker Workflow
+
+on:
+  schedule: 
+    - cron: "*/3 * * * *" 👈 # Runs every 3 minutes
+# workflow_dispatch: 👈
+
+
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF THIRD SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF THIRD SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF THIRD SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF THIRD SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF THIRD SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF THIRD SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Course: GitHub actions for DevOps Engineers. (Continued)
+Tutor: Donatus (Dee)
+Date: 07.06.2025
+Lesson: Hands on with Continuous Integration
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️ Hands on with Continuous Integration: 🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️
+
+✅-- Hands on with Continuous Integration:
+
+Steps in CI Pipeline:
+- Code Commit: - Developers push code changes.
+- Automated Build: - Dependencies are installed and the application is compiled.
+- Automated Tests: - Unit, integration, and security tests are executed.
+- Code Quality Checks: - Linting and code coverage reports are generated.
+- Security Scanning: - Static Application Security Testing (SAST) tools scan the codebase for vulnerabilities.
+
+
+🟪 What is Linting?:
+Linting is the process of analyzing source code to detect errors, stylistic inconsistencies, and potential bugs. 
+Linters enforce coding standards and help maintain code quality.
+
+
+🟨 Example CI with Linting and Testing:
+
+name: CI with Linting & Tests
+
+
+on: [push, pull_request]
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+      - uses: actions/checkout@v3
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Tests
+        run: npm test
+
+
+
+🟪-- Static Application Security Testing (SAST) Scan: 
+- SAST tools help identify security vulnerabilities in code before deployment.
+- SAST is typically part of the Continuous Integration (CI) pipeline. It scans the codebase for security
+ vulnerabilities before deployment, ensuring security issues are detected early.
+
+🟪Tools Overview:
+- SonarQube: - Code quality and security analysis.
+- Snyk: - Scans for known vulnerabilities in dependencies.
+- npm audit: - Checks for security issues in Node.js dependencies.
+- Trivy: - Scans container images for vulnerabilities
+
+
+#🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦 SonarQube - Code Quality and Security Analysis: 🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
+ 
+➡️ 1. SonarQube - Code Quality and Security Analysis:
+
+SonarQube scans the codebase for bugs, code smells, and security vulnerabilities.
+
+
+Example GitHub Action for SonarQube Analysis:
+
+name: SonarQube Scan
+
+on: 
+  - push 
+  - pull_request
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Sonar Scanner
+        run: npm install -g sonarqube-scanner
+
+      - name: Run SonarQube Analysis
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=Getdzidon_github-actions-2025 \
+            -Dsonar.organization=jomacs-github-actions-25 \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+
+Note:
+-Dsonar.projectKey=Getdzidon_github-actions-2025 \ #<name of your sonarcloud project key>   Find the following information in your SonarQube Cloud account under My Project ➡️ select your project ➡️information ➡️project Key
+-Dsonar.organization=jomacs-github-actions-25 \ #<name of your sonarcloud organization> Find the following information in your SonarQube Cloud account under My Project ➡️ select your project ➡️information ➡️Organization Key 
+-Dsonar.token=${{ secrets.SONAR_TOKEN }} #<your SonarQube token> Find the following information in your SonarQube Cloud account under My Account ➡️ security ➡️Generate Token ➡️ Name your Token ➡️ copy the token and save it in your secrets in your repository.
+
+📝 Note: You must set up your own accounts for SonarQube on Sonar cloud
+
+Why?:
+GitHub Actions provides hosted runners to execute workflows, but tools like Snyk and SonarQube are external 
+ services that require authentication. They don’t come pre-configured with GitHub.
+
+Create Sonarcloud account here: https://sonarcloud.io
+➡️ Click on Try now ➡️ You can sign up using your GitHub account (recommended).
+
+Create a token in SonarCloud:
+Go to settings ➡️ name your token (github-actions) ➡️ generate token 
+➡️ copy the token and save it in your secrets in your repository.
+
+Create Organization:
+Click Organizations ➡️ Create manually ➡️ Name your organization ➡️ Select Free Plan 
+➡️ Create Organization
+
+OR
+
+Use your Github account:
+Click Organizations ➡️ import from github ➡️ select your github account 
+➡️ select your repository (OR allow all repositories) ➡️ create organization
+
+Create Project within the Organization:
+Analyze Projects ➡️ Select your organization ➡️ link to your github repo 
+➡️ Previous version ➡️ Create Project
+
+
+#🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦 Snyk - Dependency Vulnerability Scanning: 🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
+
+➡️ 2. Snyk - Dependency Vulnerability Scanning:
+
+Snyk scans dependencies for known vulnerabilities in packages.
+
+🟨 Example GitHub Action for Snyk Security Scan:
+
+name: Example workflow for Python script scan using Snyk
+on: push
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: code test
+          args: --sarif-file-output=snyk.sarif
+          
+      - name: Count total number of vulnerabilities
+        run: |
+          RESULTS_LENGTH=$(jq '.runs[0].results | length' snyk.sarif)
+          echo "RESULTS_LENGTH=$RESULTS_LENGTH" >> $GITHUB_ENV
+          echo $RESULTS_LENGTH
+      - name: Pass_or_Fail_the_job
+        run: |
+            if [ "$RESULTS_LENGTH" != 0 ]; then
+                echo "Job Failed"
+                exit 1
+            else
+                echo "Pass"
+            fi
+
+
+📝 Note: You must set up your own accounts for Snyk ( https://snyk.io/ )
+
+Why?:
+GitHub Actions provides hosted runners to execute workflows, but tools like Snyk and SonarQube are external services that
+ require authentication. They don’t come pre-configured with GitHub.
+
+
+Create snyk account here: https://snyk.io/
+➡️ Click on Sign up ➡️  sign up using your GitHub account (recommended). ➡️ Authorize 
+➡️ Complete registration ➡️ Select Github ➡️ Next step ➡️ Choose repo permission option 
+➡️ next ➡️ Authorize snyk ➡️ Complete registration
+
+Create Project:
+Projects ➡️ Add Project ➡️ Select your repository ➡️ Click Add selected repository 
+➡️ Finish
+
+Create snyk token:
+Select your account ➡️ Account settings ➡️ General ➡️ Click Auth Token Key to reveal 
+➡️ Copy token ➡️ Save in your secrets in your repository.
+
+
+📝 Now Lets scan the following python scripts using Snyk:
+
+🟨 Example 1: test.py
+
+
+import requests
+
+# Hardcoded sensitive data (API Key)
+api_key = "1234567890abcdefg"
+url = "https://example.com/api/data"
+
+# Make API request with the sensitive key
+response = requests.get(url, headers={"Authorization": f"Bearer {api_key}"})
+
+if response.status_code == 200:
+    print("Data fetched successfully!")
+else:
+    print("Failed to fetch data")
+
+In this example, the api_key is hardcoded directly in the script, making it vulnerable.
+- Check your project history in snyk for the results of the scan.
+
+
+🟨 Example 2: test.py
+
+
+import requests
+import base64
+
+# Obfuscated sensitive data (API Key)
+api_key_encoded = "MTIzNDU2Nzg5MGFiY2RlZmdo"  # Base64 encoded API key
+url = "https://example.com/api/data"
+
+# Decode the API key
+api_key = base64.b64decode(api_key_encoded).decode('utf-8')
+
+# Make API request with the sensitive key
+response = requests.get(url, headers={"Authorization": f"Bearer {api_key}"})
+
+if response.status_code == 200:
+    print("Data fetched successfully!")
+else:
+    print("Failed to fetch data")
+
+
+- In this example, the API key is Base64 encoded, which doesn't secure the key, but it makes
+ the key less readable in the code. In a real-world scenario, you should store keys as 
+ secretes.
+
+- Check your project history in snyk for the results of the scan.
+
+
+
+🟨 Example 3: test.py
+import os
+
+# Get user input for a file to list
+filename = input("Enter the filename to list: ")
+
+# 🚨 Critical vulnerability: Command Injection!
+os.system(f"ls -l {filename}")
+
+
+🟨 Example 4: test.py
+
+import os
+import pickle
+import sqlite3
+import subprocess
+from flask import Flask, request
+
+app = Flask(__name__)
+
+# 🚨 CRITICAL VULNERABILITY 1: Hardcoded API Key & Password
+API_KEY = "sk-CRITICAL-LEAKED-KEY-987654"
+DB_PASSWORD = "Admin123!"
+
+# 🚨 CRITICAL VULNERABILITY 2: Remote Code Execution via HTTP Request
+@app.route("/rce", methods=["POST"])
+def remote_execute():
+    code = request.form.get("code")  # User-provided code
+    return str(eval(code))  # 🔥 Full RCE via exposed HTTP endpoint!
+
+# 🚨 CRITICAL VULNERABILITY 3: SQL Injection
+@app.route("/user", methods=["GET"])
+def get_user():
+    username = request.args.get("username")
+
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    
+    # 🔥 Exploitable SQL injection
+    query = f"SELECT * FROM users WHERE username = '{username}'"
+    cursor.execute(query)
+
+    return str(cursor.fetchall())
+
+# 🚨 CRITICAL VULNERABILITY 4: Command Injection
+@app.route("/cmd", methods=["POST"])
+def execute_command():
+    user_input = request.form.get("cmd")
+    
+    # 🔥 Full system compromise possible!
+    result = subprocess.check_output(f"bash -c '{user_input}'", shell=True)
+    return result.decode()
+
+if __name__ == "__main__":
+    print(f"⚠️  Running vulnerable server on http://localhost:5000")
+    print(f"⚠️  API Key: {API_KEY}")
+
+    app.run(host="0.0.0.0", port=5000, debug=True)  # Debug mode exposes even more risk!
+
+
+
+🟨🟨🟨🟨🟨🟨Try the following to scan your resume App:
+
+# name: Snyk Security Scan
+
+# on:
+#   push
+
+# jobs:
+#   security:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18'
+
+#       - name: Generate package.json file
+#         run: npm init -y
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run Snyk Security Scan
+#         uses: snyk/actions/node@master
+#         env:
+#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+
+
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FOURTH SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FOURTH SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FOURTH SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FOURTH SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FOURTH SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+#🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧 END OF FOURTH SESSION 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
